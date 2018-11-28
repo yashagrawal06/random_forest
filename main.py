@@ -23,7 +23,7 @@ def main():
 	# Test the random forest algorithm
 	seed(2)
 	# load and prepare data
-	filename = 'data/dt_test.csv'
+	filename = 'data/train_nb.csv'
 	dataset = load_csv(filename)
 	# convert string attributes to integers
 	for i in range(0, len(dataset[0])-1):
@@ -36,7 +36,7 @@ def main():
 	min_size = 1
 	sample_size = 1.0
 	n_features = int(sqrt(len(dataset[0])-1))
-	for n_trees in [10, 25, 50]:
+	for n_trees in [1, 5, 10]:
 		scores = evaluate_algorithm(dataset, random_forest, n_folds, max_depth, min_size, sample_size, n_trees, n_features)
 		print('Trees: %d' % n_trees)
 		print('Scores: %s' % scores)
