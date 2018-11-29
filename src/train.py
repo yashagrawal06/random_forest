@@ -1,5 +1,4 @@
 #Importing the libraries
-
 from random import seed
 from random import randrange
 from csv import reader
@@ -40,21 +39,11 @@ def cross_validation_split(dataset,k_folds):
 	fold_size = int(len(dataset)/k_folds)
 	for i in range(k_folds):
 		fold = list()
-		while len(fold)<fold_size:
+		while len(fold) < fold_size:
 			index = randrange(len(dataset_copy))
 			fold.append(dataset_copy.pop(index))
 		dataset_split.append(fold)
 	return dataset_split
-
-#Split dataset based on attribute and attribute value
-def test_split(index, value, dataset):
-	left, right = list(), list()
-	for row in dataset():
-		if row[index] < value:
-			left.append(row)
-		else:
-			right.append(row)
-	return left, right
 
 #Calculate accuracy
 def metric_accuracy(actual, predicted):
@@ -63,6 +52,18 @@ def metric_accuracy(actual, predicted):
 		if actual[i] == predicted[i]:
 			correct_pred +=1
 	return correct_pred / float(len(actual)) * 100.0
+
+#Split dataset based on attribute and attribute value
+def test_split(index, value, dataset):
+	left, right = list(), list()
+	for row in dataset:
+		if row[index] < value:
+			left.append(row)
+		else:
+			right.append(row)
+	return left, right
+
+
 
 #Evaluate algorith with cross_validation_split
 def evaluate_algorithm(dataset, algorithm, k_folds, *args):
@@ -108,15 +109,14 @@ def get_split(dataset, n_features):
 	for index in features:
 		for row in dataset:
 			groups = test_split(index, row[index], dataset)
-			gini = gini_index(groups, class_value)
+			gini = gini_index(groups, class_values)
 			if gini < b_score:
-				b_index, b_value, b_score, b_groups = index, row[index], gini,
-				groups
+				b_index, b_value, b_score, b_groups = index, row[index], gini,  groups
 	return{'index': b_index, 'value':b_value, 'groups':b_groups}
 
 #Create a terminal node value
 def to_terminal(group):
-	outcomes = [row[-1] for row in dataset]
+	outcomes = [row[-1] for row in group]
 	return max(set(outcomes), key=outcomes.count)
 
 #Create Child Splits or terminal/leaf node
@@ -157,7 +157,7 @@ def subsample(dataset, ratio):
 
 #Predictions with Decision Tree
 def predict(node, row):
-	if row(node['index']) < node['value']:
+	if row[node['index']] < node['value']:
 		if isinstance(node['left'], dict):
 			return predict(node['left'], row)
 		else:

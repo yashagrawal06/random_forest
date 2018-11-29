@@ -23,7 +23,7 @@ def main():
 	# Test the random forest algorithm
 	seed(2)
 	# load and prepare data
-	filename = 'data/train_nb.csv'
+	filename = 'data/sonar.all-data.csv'
 	dataset = load_csv(filename)
 	# convert string attributes to integers
 	for i in range(0, len(dataset[0])-1):
